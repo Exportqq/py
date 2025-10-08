@@ -76,7 +76,24 @@ WHERE
 
 
 
+from tkinter import ttk
 
+DB={"host":"","user":"","password":"","database":"","charset":""}
+
+def rows():
+    c=pymysql.connect(**DB).cursor()
+    c.execute("SELECT name_estrad,place,time_order,summ FROM Data_get")
+    return c.fetchall()
+
+root=tk.Tk(); root.title("Data_get")
+cols=("e","p","t","s")
+tree=ttk.Treeview(root,columns=cols,show="headings")
+labels=[("Эстрада",150),("Место",150),("Время",120),("Сумма",120)]
+for col,(text,width) in zip(cols,labels):
+    tree.heading(col, text=text); tree.column(col,width=width,anchor="center")
+tree.pack(fill="both",expand=True)
+for r in rows(): tree.insert("","end",values=r)
+root.mainloop()
 
 
 
